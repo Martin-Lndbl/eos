@@ -1,0 +1,2 @@
+# eos
+Eos server configuration
