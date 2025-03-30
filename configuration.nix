@@ -1,44 +1,48 @@
-{ config, lib, pkgs, ... }:
+{
+  pkgs,
+  lib,
+  modulesPath,
+  ...
+}:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
+  imports = [
+    (modulesPath + "/profiles/qemu-guest.nix")
+  ];
+
+  boot.initrd.availableKernelModules = [ "virtio_scsi" ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ ];
+  boot.extraModulePackages = [ ];
+
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/1691a5a7-cc97-41b6-a42d-fad5ec147919";
+    fsType = "ext4";
+  };
+
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/3A83-1D37";
+    fsType = "vfat";
+    options = [
+      "fmask=0022"
+      "dmask=0022"
     ];
+  };
+
+  swapDevices = [ ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   networking.hostName = "eos";
-  # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
 
-  # time.timeZone = "Europe/Amsterdam";
+  time.timeZone = "Europe/Amsterdam";
 
-  # Select internationalisation properties.
-  # i18n.defaultLocale = "en_US.UTF-8";
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
-  # };
-
-  # Enable the X11 windowing system.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  users.users.mrtn = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" ];
-    packages = with pkgs; [ ];
-   };
-
-   environment.systemPackages = with pkgs; [
-     vim
-     git
-   ];
+  environment.systemPackages = with pkgs; [
+    vim
+    git
+  ];
 
   services.openssh = {
     enable = true;
@@ -47,11 +51,13 @@
       PermitRootLogin = "no";
     };
   };
-  users.users.mrtn.openssh.authorizedKeys.keys = [
-    "ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBABCmZLhiHvPWTbyaInI0XBqpbHi5OUdymVr42r2ganFA/7eGfsTi4BN5heBmPkHlay5g/Pl1I0YYJsEF1tdIffqtAGn8riy6BK8cJ76ABl8ZSPQdoVlOuncXzn32BrjJ2kr9BAfCV21WeC2SfpCRYj3sCWZFA2PknSoEfh0kzOTEW22Vg== mrtn@nix-nb"
+
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
   ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  networking.useDHCP = lib.mkDefault true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
@@ -59,11 +65,5 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
-  # Copy the NixOS configuration file and link it from the resulting system
-  # (/run/current-system/configuration.nix). This is useful in case you
-  # accidentally delete configuration.nix.
-  # system.copySystemConfiguration = true;
-
   system.stateVersion = "25.05";
 }
-

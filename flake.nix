@@ -40,8 +40,8 @@
         };
         modules = [
           envfs.nixosModules.envfs
+          ./users.nix
           ./configuration.nix
-          ./hardware-configuration.nix
         ] ++ import ./modules;
       };
     };
