@@ -10,6 +10,10 @@
 
     envfs.url = "github:Mic92/envfs";
     envfs.inputs.nixpkgs.follows = "nixpkgs";
+
+    mailserver.url = "gitlab:simple-nixos-mailserver/nixos-mailserver";
+    mailserver.inputs.nixpkgs.follows = "nixpkgs";
+    mailserver.inputs.nixpkgs-24_11.follows = "nixpkgs-stable";
   };
 
   outputs =
@@ -42,6 +46,7 @@
           envfs.nixosModules.envfs
           ./users.nix
           ./configuration.nix
+          ./containers
         ] ++ import ./modules;
       };
     };
