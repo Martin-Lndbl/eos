@@ -9,7 +9,10 @@
     enable = true;
     virtualHosts = {
       "acmechallenge.lndbl.de" = {
-        serverAliases = [ "*.lndbl.de" ];
+        serverAliases = [
+          "lndbl.de"
+          "*.lndbl.de"
+        ];
         locations."/.well-known/acme-challenge" = {
           root = "/var/lib/acme/.challenges";
         };
@@ -17,27 +20,26 @@
           return = "301 https://$host$request_uri";
         };
       };
-      "foo.lndbl.de" = {
+      "appflowy.lndbl.de" = {
         forceSSL = true;
-        useACMEHost = "foo.lndbl.de";
+        useACMEHost = "lndbl.de";
+        locations."/".proxyPass = "trilium";
+      };
+      "lndbl.de" = {
+        forceSSL = true;
+        useACMEHost = "lndbl.de";
         locations."/".index = "index.html";
       };
     };
   };
 
+  security.acme.defaults.email = "acmechallenge@lndbl.de";
+  security.acme.defaults.webroot = "/var/lib/acme/.challenges";
+  security.acme.defaults.group = "nginx";
+
   security.acme.certs = {
-    "foo.lndbl.de" = {
-      webroot = "/var/lib/acme/.challenges";
-      email = "foo@lndbl.de";
-      group = "nginx";
-      # extraDomainNames = [ "mail.lndbl.de" ];
-    };
-    "mail.lndbl.de" = {
-      webroot = "/var/lib/acme/.challenges";
-      email = "mail@lndbl.de";
-      group = "nginx";
-      reloadServices = [ "container@mailserver.service" ];
-    };
+    "lndbl.de".extraDomainNames = [ "appflowy.lndbl.de" ];
+    "mail.lndbl.de".reloadServices = [ "container@mailserver.service" ];
   };
 
   networking = {
