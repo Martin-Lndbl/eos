@@ -20,14 +20,14 @@
           return = "301 https://$host$request_uri";
         };
       };
-      "appflowy.lndbl.de" = {
+      "trilium.lndbl.de" = {
         forceSSL = true;
         useACMEHost = "lndbl.de";
-        locations."/".proxyPass = "trilium";
+        locations."/".proxyPass = "http://localhost:8080";
       };
       "lndbl.de" = {
         forceSSL = true;
-        useACMEHost = "lndbl.de";
+        enableACME = true;
         locations."/".index = "index.html";
       };
     };
@@ -38,7 +38,9 @@
   security.acme.defaults.group = "nginx";
 
   security.acme.certs = {
-    "lndbl.de".extraDomainNames = [ "appflowy.lndbl.de" ];
+    "lndbl.de".extraDomainNames = [ "trilium.lndbl.de" ];
+    # "trilium.lndbl.de".extraDomainNames = [ ];
+    # "lndbl.de".extraDomainNames = [ "trilium.lndbl.de" ];
     "mail.lndbl.de".reloadServices = [ "container@mailserver.service" ];
   };
 

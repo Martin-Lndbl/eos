@@ -3,6 +3,7 @@
   imports = [
     ./nginx
     ./mailserver
+    ./trilium
   ];
 
   networking.nat = {
@@ -10,4 +11,6 @@
     internalInterfaces = [ "ve-+" ];
     externalInterface = "enp0s6";
   };
+
+  virtualisation.oci-containers.backend = "docker";
 }
