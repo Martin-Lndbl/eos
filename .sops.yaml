@@ -1,0 +1,17 @@
+keys:
+  - &cronus-mrtn age1yttrat330h9au54dxlwz28u0wh9hxgc3lfshwgdyrwdgydcu3prse3vnmm
+  - &nix_nb-mrtn age105kg9a0dk9yvm8kwut3fravfj3w7cu8n5ce4pyw0ukd0jdw34phq78fk0t
+  - &eos-mrtn age130yamevfhmml2ldfu7md0z96992zhfm8lrmkxzwzmdwa3y99a53q2djwkx
+  - &eos age17kmkur0azrqm0n6ufn6337xthpgyg3u0f0qk3uccx8p2n7dvypxs6x75hq
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - age:
+      - *cronus-mrtn
+      - *nix_nb-mrtn
+      - *eos-mrtn
+      - *eos
+  - path_reges: secrets/networking.yaml
+    key_groups:
+    - age:
+      - *eos

@@ -21,6 +21,7 @@
       self,
       nixpkgs,
       envfs,
+      sops-nix,
       ...
     }@inputs:
     let
@@ -44,6 +45,7 @@
         };
         modules = [
           envfs.nixosModules.envfs
+          sops-nix.nixosModules.sops
           ./users.nix
           ./base.nix
           ./networking
