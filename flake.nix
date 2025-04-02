@@ -45,7 +45,8 @@
         modules = [
           envfs.nixosModules.envfs
           ./users.nix
-          ./configuration.nix
+          ./base.nix
+          ./networking
           ./containers
         ] ++ import ./modules;
       };

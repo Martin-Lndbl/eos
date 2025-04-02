@@ -1,7 +1,6 @@
 { ... }:
 {
   imports = [
-    ./networking.nix
     ./mailserver
     ./trilium
   ];
