@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   containers.mailserver = {
-    autoStart = true;
+    autoStart = false;
     privateNetwork = true;
     hostAddress = "10.0.0.20";
     localAddress = "10.0.0.21";
@@ -30,9 +30,17 @@
               aliases = [ ];
               catchAll = [ "lndbl.de" ];
             };
+            "ocid1.user.oc1..aaaaaaaas7jey2sgksb3usvd2dtl5hxfjapaufz7h5e4j5wez4vpjywtryeq@ocid1.tenancy.oc1..aaaaaaaap74ers5bdscen43xaqmd6evzacmakqyxoys2z4odtuiuvhmsci6q.u4.com" =
+              {
+                hashedPassword = "$2b$05$5raDCpds3jxlg6haxM.gEeyW021RjzC8ng4m4wUJL1Kvywk834MOG";
+                aliases = [ "smtp.email.eu-frankfurt-1.oci.oraclecloud.com" ];
+              };
           };
-
           certificateScheme = "acme";
+        };
+        services.postfix = {
+          relayHost = "smtp.email.eu-frankfurt-1.oci.oraclecloud.com";
+          relayPort = 587;
         };
 
         security.acme.acceptTerms = true;

@@ -1,11 +1,14 @@
 { ... }:
 {
-  virtualisation.oci-containers.containers."trilium" = {
-    ports = [ "127.0.0.1:8080:8080" ];
-    image = "zadam/trilium:0.63.7";
-    hostname = "trilium";
-    volumes = [
-      "/home/mrtn/.local/share/trilium-data:/home/node/trilium-data"
-    ];
-  };
+  virtualisation.docker.enable = true;
+  # virtualisation.oci-containers.backend = "docker";
+  # virtualisation.oci-containers.containers."trilium" = {
+  #   autoStart = true;
+  #   image = "triliumnext/notes:v0.90.4";
+  #   hostname = "trilium";
+  #   volumes = [
+  #     "/home/mrtn/.local/share/trilium-data:/home/node/trilium-data"
+  #   ];
+  #   extraOptions = [ "--network=net_trilium" ];
+  # };
 }

@@ -27,6 +27,7 @@ in
     enable = true;
     settings = {
       interface = wireguardInterface;
+      address = [ "/mrtn.trilium.home/10.10.1.10" ];
       server = [
         "8.8.8.8"
         "8.8.4.4"
@@ -36,17 +37,17 @@ in
 
   networking.wg-quick.interfaces = {
     "${wireguardInterface}" = {
-      address = [ "10.10.0.1/24" ];
+      address = [ "10.10.0.1/16" ];
       listenPort = wgPort;
 
       postUp = ''
         ${pkgs.iptables}/bin/iptables -A FORWARD -i ${wireguardInterface} -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.10.0.1/24 -o ${externalInterface} -j MASQUERADE
+        ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s 10.10.0.1/16 -o ${externalInterface} -j MASQUERADE
       '';
 
       preDown = ''
         ${pkgs.iptables}/bin/iptables -D FORWARD -i ${wireguardInterface} -j ACCEPT
-        ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.10.0.1/24 -o ${externalInterface} -j MASQUERADE
+        ${pkgs.iptables}/bin/iptables -t nat -D POSTROUTING -s 10.10.0.1/16 -o ${externalInterface} -j MASQUERADE
       '';
       privateKeyFile = config.sops.secrets.wg_server_private.path;
 
@@ -66,6 +67,4 @@ in
       ];
     };
   };
-  networking.networkmanager.dns = "systemd-resolved";
-  services.resolved.enable = true;
 }
